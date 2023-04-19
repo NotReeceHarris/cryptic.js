@@ -19,6 +19,9 @@ const validation = require('./utils/validation');
 const color = require('./utils/color');
 const ui = require('./utils/ui');
 
+
+const readline = require('readline');
+
 server.on('connection', (socket) => {
   if (client.length === 0) {
     client.push(socket);
@@ -90,13 +93,13 @@ socket.on('data', async (data) => {
         message: message,
         from: 'peer',
       });
-      console.log(`${color.FgCyan}[${color.FgWhite}${new Date(timestamp).toLocaleString('en-US', {
+      console.log(`${color.FgBlue}[${color.FgWhite}${new Date(timestamp).toLocaleString('en-US', {
         hour: 'numeric',
         minute: 'numeric',
         day: 'numeric',
         month: 'numeric',
         year: 'numeric',
-      })}${color.FgCyan}] ${color.Bright}(Peer)${color.Reset}: ${message}`);
+      })}${color.FgBlue}] ${color.Bright}(Peer)${color.Reset}: ${message}`);
     } else {
       messageLogs.push({
         timestamp: new Date().getTime(),
@@ -118,6 +121,11 @@ socket.on('error', () => {
   }
 });
 
+console.log('\n');
+console.log(`${color.FgCyan}Cryptic.js${color.FgWhite} V${version}${color.Reset}`);
+console.log(`${color.Dim}(https://github.com/NotReeceHarris/cryptic.js)${color.Reset}`);
+console.log('────────────────────────────────', '\n');
+
 // Start with async for a linear process
 (async () => {
   let waitInterval;
@@ -127,7 +135,7 @@ socket.on('error', () => {
   await inquirer.prompt([
     {
       type: 'number', name: 'port',
-      message: 'What port do you want to listen on?',
+      message: 'Which port would you like to set for listening?',
       validate: validation.listenPort,
     },
   ]).then((answers) => {
@@ -148,19 +156,24 @@ socket.on('error', () => {
     {
       type: 'input',
       name: 'peer_host',
-      message: 'What is the IP address of your peer?',
+      message: 'What is the IP address of the device you wish to connect with?',
       default: 'localhost',
       validate: validation.peerHost,
     },
     {
       type: 'number',
       name: 'peer_port',
-      message: 'What port is your peer listening on?',
+      message: 'Which port is the device you wish to connect with listening on?',
       validate: validation.peerPort,
     },
   ]).then((answers) => {
     process.env.peer_host = answers.peer_host;
     process.env.peer_port = answers.peer_port;
+  });
+
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
   });
 
   socket.on('connect', () => {
@@ -248,12 +261,12 @@ socket.on('error', () => {
     process.exit();
   }
 
-  console.log('\n', '────────────────', '\n');
-  console.log(` ${color.FgCyan}Version${color.Reset}: ${version}`);
+  console.log('\n', '────────────────────────────────', '\n');
+  console.log(` ${color.FgCyan}Peer${color.Reset}: ${client[0].remoteAddress}`);
   console.log(` ${color.FgCyan}Shared key checksum${color.Reset}: sha256 ${crypto.createHash('sha256').update(process.env.sharedKey).digest('hex')}`);
   console.log(` ${color.FgCyan}Encryption algorithm${color.Reset}: ${algorithm}`);
   console.log(` ${color.FgCyan}Elliptic curve${color.Reset}: ${ellipticCurve}`);
-  console.log('\n', '────────────────', '\n');
+  console.log('\n', '────────────────────────────────', '\n');
 
   console.log(`${color.FgCyan}[${color.FgWhite}${new Date().toLocaleString('en-US', {
     hour: 'numeric',
@@ -263,22 +276,20 @@ socket.on('error', () => {
     year: 'numeric',
   })}${color.FgCyan}] ${color.Bright}(Broadcast)${color.Reset}: An "end to end" encrypted connection has been established, you may now type.`);
 
-
-  const readline = require('readline');
-
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-
-  rl.on('line', (input) => {
+  rl.on('line', async (input) => {
     if (input === ':q') {
       process.exit();
     }
 
+    if (input === '') {
+      readline.moveCursor(process.stdout, 0, -1);
+      readline.clearLine(process.stdout, 1);
+      return;
+    }
+
     const timestamp = new Date().getTime();
 
-    (async () => {
+    await (async () => {
       readline.moveCursor(process.stdout, 0, -1);
       readline.clearLine(process.stdout, 1);
       console.log(`${color.FgCyan}[${color.FgWhite}${new Date(timestamp).toLocaleString('en-US', {
