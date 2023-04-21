@@ -6,6 +6,16 @@ const version = '1.0';
 const algorithm = 'aes-256-cbc';
 const ellipticCurve = 'secp256k1';
 
+const validation = require('./utils/validation');
+const color = require('./utils/color');
+const ui = require('./utils/ui');
+
+if (process.argv[2] === '--version') {
+  console.log(`\n${color.FgCyan}Cryptic.js${color.FgWhite} version ${version}${color.Reset}`);
+  console.log(`${color.Dim}(https://github.com/NotReeceHarris/cryptic.js)${color.Reset}`);
+  process.exit(0);
+}
+
 const crypto = require('crypto');
 const inquirer = require('inquirer');
 
@@ -14,11 +24,6 @@ const socket = new net.Socket();
 const server = net.createServer();
 const client = [];
 const messageLogs = [];
-
-const validation = require('./utils/validation');
-const color = require('./utils/color');
-const ui = require('./utils/ui');
-
 
 const readline = require('readline');
 
