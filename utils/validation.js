@@ -66,7 +66,7 @@ const ngrokToken = async (input) => {
       await ngrok.disconnect(url);
       return true;
     } catch (error) {
-      return 'The ngrok auth token you have entered is invalid!', error.body;
+      return 'The ngrok auth token you have entered is invalid!';
     }
   }
 };
