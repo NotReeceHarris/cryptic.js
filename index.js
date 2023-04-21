@@ -1,8 +1,10 @@
+#!/usr/bin/env node
+
 /* eslint-disable new-cap */
 /* eslint-disable max-len */
 /* eslint-disable no-unused-vars */
 
-const version = '1.0.1';
+const version = '1.0.5';
 const algorithm = 'aes-256-cbc';
 const ellipticCurve = 'secp256k1';
 

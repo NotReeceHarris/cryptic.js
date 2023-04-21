@@ -1,11 +1,14 @@
 {
   "name": "crypticjs",
-  "version": "1.0.1",
+  "version": "1.0.5",
   "description": "💬 This Node.js application is an end-to-end encrypted chat system that ensures secure communication between users. The application uses encryption techniques to protect messages in transit and storage, preventing unauthorized access. Users can exchange messages with confidence, knowing that their communication is secure and protected.",
-  "main": "index.js",
+  "main": "./bin/cryptic.js",
   "bin": {
     "crypticjs": "./bin/cryptic.js"
-  },  
+  },
+  "scripts": {
+    "build": "node ./build.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/NotReeceHarris/cryptic.js.git"
@@ -25,6 +28,7 @@
   "devDependencies": {
     "eslint": "^8.38.0",
     "eslint-config-google": "^0.14.0",
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.22",
+    "uglify-js": "^3.17.4"
   }
 }
