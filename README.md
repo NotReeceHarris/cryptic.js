@@ -10,7 +10,7 @@ This Node.js application is an end-to-end encrypted chat system that ensures sec
 
 </details> 
 
-## Installation
+## 🧰 Installation
 
 Installing Cryptic js is a straightforward process. First, ensure that you have [Node.js](https://nodejs.org/) version `12.x` or higher and a node package manager (such as [NPM](https://www.npmjs.com/)) installed on your system.
 
@@ -30,7 +30,7 @@ crypticjs --version
 
 This should display the version number of Cryptic js that you just installed.
 
-## Usage
+## ⚙️ Usage
 
 Using Cryptic js is a simple process. To get started, open a terminal or command prompt and enter the following command:
 
@@ -40,7 +40,7 @@ crypticjs
 
 This command will start Cryptic js and prompt you to enter the listening port, host's IP address, and port number.
 
-## Using ngrok
+### Using ngrok
 
 Using ngrok to create a secure HTTP tunnel is a great way to enhance your security and privacy by hiding your IP address. It also eliminates the need to port forward your device, making it much easier to use Cryptic js.
 
@@ -66,7 +66,7 @@ Note: If you are using Cryptic js version `1.2.x` or higher, you can set up ngro
 crypticjs --ngrok
 ```
 
-## Disclaimer
+## 🚩 Disclaimer
 
 Using Cryptic js can enhance your security and privacy, but it is not a guarantee of complete security. While Cryptic js uses proven and effective algorithms to secure your communication line, it is important to remember that **no system is 100% secure**.
 
