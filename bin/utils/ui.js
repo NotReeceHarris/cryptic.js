@@ -1,0 +1,1 @@
+const showLoadingAnimation=t=>{let o=["-","\\","|","/"],n=0,s=setInterval(()=>{process.stdout.clearLine(),process.stdout.cursorTo(0),process.stdout.write("\x1b[32m"+o[n]+"\x1b[0m"+t),n=(n+1)%o.length},100);return function t(){clearInterval(s),process.stdout.clearLine(),process.stdout.cursorTo(0)}};module.exports={showLoadingAnimation};

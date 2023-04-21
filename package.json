@@ -1,18 +1,17 @@
 {
-  "name": "cryptic",
+  "name": "crypticjs",
   "version": "1.0.0",
   "description": "💬 This Node.js application is an end-to-end encrypted chat system that ensures secure communication between users. The application uses encryption techniques to protect messages in transit and storage, preventing unauthorized access. Users can exchange messages with confidence, knowing that their communication is secure and protected.",
   "main": "index.js",
-  "scripts": {
-    "c1": "node ./src/connect.js 4000 3000",
-    "c2": "node ./src/connect.js 3000 4000"
-  },
+  "bin": {
+    "crypticjs": "./bin/cryptic.js"
+  },  
   "repository": {
     "type": "git",
     "url": "git+https://github.com/NotReeceHarris/cryptic.js.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Reece Harris <reeceharris@email.com>",
+  "license": "APGL-3.0",
   "bugs": {
     "url": "https://github.com/NotReeceHarris/cryptic.js/issues"
   },
