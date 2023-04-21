@@ -7,6 +7,9 @@ const toMinify = [
   './utils/color.js',
   './utils/ui.js',
   './utils/validation.js',
+  './utils/cryptography.js',
+  './utils/serverEvents.js',
+  './utils/socketEvents.js',
 ];
 
 const outputDir = path.join(__dirname, 'build');

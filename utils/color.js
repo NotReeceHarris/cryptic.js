@@ -6,7 +6,6 @@ module.exports = {
   Blink: '\x1b[5m',
   Reverse: '\x1b[7m',
   Hidden: '\x1b[8m',
-
   FgBlack: '\x1b[30m',
   FgRed: '\x1b[31m',
   FgGreen: '\x1b[32m',
@@ -16,7 +15,6 @@ module.exports = {
   FgCyan: '\x1b[36m',
   FgWhite: '\x1b[37m',
   FgGray: '\x1b[90m',
-
   BgBlack: '\x1b[40m',
   BgRed: '\x1b[41m',
   BgGreen: '\x1b[42m',
@@ -26,5 +24,4 @@ module.exports = {
   BgCyan: '\x1b[46m',
   BgWhite: '\x1b[47m',
   BgGray: '\x1b[100m',
-
 };

@@ -8,133 +8,36 @@ const version = '1.2.1';
 const algorithm = 'aes-256-cbc';
 const ellipticCurve = 'secp256k1';
 
-const validation = require('./utils/validation');
 const color = require('./utils/color');
-const ui = require('./utils/ui');
 
 if (process.argv[2] === '--version') {
-  console.log(`\n${color.FgCyan}Cryptic.js${color.FgWhite} version ${version}${color.Reset}`);
-  console.log(`${color.Dim}(https://github.com/NotReeceHarris/cryptic.js)${color.Reset}`);
+  console.log(`\n${color.FgCyan}Cryptic.js${color.FgWhite} version ${version}${color.Reset}\n${color.Dim}https://github.com/NotReeceHarris/cryptic.js${color.Reset}`);
   process.exit(0);
 }
 
+const cryptography = require('./utils/cryptography');
+const validation = require('./utils/validation');
+const ui = require('./utils/ui');
+
+const socketEvents = require('./utils/socketEvents');
+const serverEvents = require('./utils/serverEvents');
+
 const crypto = require('crypto');
 const inquirer = require('inquirer');
-
+const readline = require('readline');
 const net = require('net');
+
 const socket = new net.Socket();
 const server = net.createServer();
 const client = [];
+
 const messageLogs = [];
 
-const readline = require('readline');
+serverEvents(server, client);
+socketEvents(socket, client, version, algorithm, messageLogs);
 
-server.on('connection', (socket) => {
-  if (client.length === 0) {
-    client.push(socket);
+console.log(`\n${color.FgCyan}Cryptic.js${color.FgWhite} V${version}${color.Reset}\n${color.Dim}https://github.com/NotReeceHarris/cryptic.js${color.Reset}\n\n────────────────────────────────\n`);
 
-    socket.on('close', () => {
-      client.splice(0, client.length);
-    });
-  } else {
-    socket.end();
-
-    console.log(`${color.FgCyan}[${color.FgWhite}${new Date().toLocaleString('en-US', {
-      hour: 'numeric',
-      minute: 'numeric',
-      day: 'numeric',
-      month: 'numeric',
-      year: 'numeric',
-    })}${color.FgCyan}] ${color.Bright}(Broadcast)${color.Reset}: A 3rd party connection just tried to connect to you. "${socket.remoteAddress}"`);
-  }
-});
-
-socket.on('data', async (data) => {
-  if (process.env.peerPublicKey === undefined && data.toString('utf8').includes(`:key-cryptic.js-v-${version}:`)) {
-    const dataArray = data.toString('utf8').split(`:key-cryptic.js-v-${version}:`);
-    process.env.peerPublicKey = dataArray[1];
-    return;
-  }
-
-  if (process.env.confirmedSharedKey === undefined && data.toString('utf8').includes(`:validate-sharedKey-cryptic.js-v-${version}:`)) {
-    let waitIntervalQueue;
-
-    // If request comes and we are not ready for it, queue the request till we are ready
-    await new Promise((res) => {
-      waitIntervalQueue = setInterval(function() {
-        if (process.env.sharedKey != undefined && process.env.confirmedSharedKey === undefined) {
-          const dataArray = data.toString('utf8').split(`:validate-sharedKey-cryptic.js-v-${version}:`);
-          const hashedSharedKey = crypto.createHash('sha256').update(process.env.sharedKey).digest('hex');
-
-          const encrypted = Buffer.from(dataArray[1].split(':iv:')[0], 'hex');
-          const iv = Buffer.from(dataArray[1].split(':iv:')[1], 'base64');
-          const key = Buffer.from(process.env.sharedKey, 'hex');
-          const decipher = crypto.createDecipheriv(algorithm, key, iv);
-          const decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()]).toString('hex');
-
-          process.env.confirmedSharedKey = decrypted === hashedSharedKey;
-          res();
-        }
-      }, 100);
-    });
-
-    clearInterval(waitIntervalQueue);
-    return;
-  }
-
-  if (process.env.confirmedSharedKey && data.toString('utf8').includes(`:message-cryptic.js-v-${version}:`)) {
-    const dataArray = data.toString('utf8').split(`:message-cryptic.js-v-${version}:`);
-
-    const encrypted = Buffer.from(dataArray[1], 'base64');
-    const iv = Buffer.from(dataArray[0], 'base64');
-    const key = Buffer.from(process.env.sharedKey, 'hex');
-
-    const decipher = crypto.createDecipheriv(algorithm, key, iv);
-    const decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()]).toString('utf8');
-
-    if (decrypted.includes(':timestamp:')) {
-      const message = decrypted.split(':timestamp:')[1];
-      const timestamp = parseInt(decrypted.split(':timestamp:')[0]);
-      messageLogs.push({
-        timestamp: timestamp,
-        message: message,
-        from: 'peer',
-      });
-      console.log(`${color.FgBlue}[${color.FgWhite}${new Date(timestamp).toLocaleString('en-US', {
-        hour: 'numeric',
-        minute: 'numeric',
-        day: 'numeric',
-        month: 'numeric',
-        year: 'numeric',
-      })}${color.FgBlue}] ${color.Bright}(Peer)${color.Reset}: ${message}`);
-    } else {
-      messageLogs.push({
-        timestamp: new Date().getTime(),
-        message: 'Couldn\'t decrypt message',
-        from: 'peer',
-      });
-    }
-  }
-});
-
-socket.on('error', () => {
-  if (client.length === 0 && !process.env.confirmedSharedKey) {
-    console.log(`${color.FgRed}!${color.Reset}${color.Bright} Couldn't connect to peer, trying again in 5 seconds...${color.Reset}`);
-  }
-
-  if (client.length === 0 && process.env.confirmedSharedKey) {
-    console.log(`${color.FgRed}!${color.Reset}${color.Bright} The peer has disconnected${color.Reset}`);
-    process.exit();
-  }
-});
-
-console.log('\n');
-console.log(`${color.FgCyan}Cryptic.js${color.FgWhite} V${version}${color.Reset}`);
-console.log(`${color.Dim}(https://github.com/NotReeceHarris/cryptic.js)${color.Reset}`);
-console.log('────────────────────────────────', '\n');
-
-
-// Start with async for a linear process
 (async () => {
   let waitInterval;
   let loadingAnimation;
@@ -153,7 +56,6 @@ console.log('──────────────────────�
     });
   }
 
-  // Get listening port
   await inquirer.prompt([
     {
       type: 'input', name: 'port',
@@ -164,7 +66,6 @@ console.log('──────────────────────�
     process.env.port = answers.port;
   });
 
-  // Start listening on inputted port
   await new Promise((res) => {
     server.listen(process.env.port, () => {
       res();
@@ -183,7 +84,6 @@ console.log('──────────────────────�
     console.log(`${color.FgGreen}!${color.Reset}${color.Bright} Now listing on port ${process.env.port}...${color.Reset}`);
   }
 
-  // Get peer info
   await inquirer.prompt([
     {
       type: 'input',
@@ -263,6 +163,11 @@ console.log('──────────────────────�
     const derivedSharedKey = await crypto.createHash('sha256').update(sharedSecret).digest('hex');
     const sharedKey = await crypto.pbkdf2Sync(derivedSharedKey, version, 100000, 32, 'sha256').toString('hex');
 
+    process.env.shuffleKey = [
+      ...sharedSecret.toString('hex').replace(/[^0-9]/g, '').split(''),
+      ...derivedSharedKey.replace(/[^0-9]/g, '').split(''),
+      ...sharedKey.replace(/[^0-9]/g, '').split(''),
+    ].join();
     process.env.derivedSharedKey = derivedSharedKey;
     process.env.sharedKey = sharedKey;
   })();
@@ -293,12 +198,12 @@ console.log('──────────────────────�
     process.exit();
   }
 
-  console.log('\n', '────────────────────────────────', '\n');
-  console.log(` ${color.FgCyan}Peer${color.Reset}: ${process.env.peer_host.replace('tcp://', '')}:${process.env.peer_port}`);
-  console.log(` ${color.FgCyan}Shared key checksum${color.Reset}: sha256 ${crypto.createHash('sha256').update(process.env.sharedKey).digest('hex')}`);
-  console.log(` ${color.FgCyan}Encryption algorithm${color.Reset}: ${algorithm}`);
-  console.log(` ${color.FgCyan}Elliptic curve${color.Reset}: ${ellipticCurve}`);
-  console.log('\n', '────────────────────────────────', '\n');
+  console.log('\n────────────────────────────────', '\n');
+  console.log(`${color.FgCyan}Peer${color.Reset}: ${process.env.peer_host.replace('tcp://', '')}:${process.env.peer_port}`);
+  console.log(`${color.FgCyan}Shared key checksum${color.Reset}: sha256 ${crypto.createHash('sha256').update(process.env.sharedKey).digest('hex')}`);
+  console.log(`${color.FgCyan}Encryption algorithm${color.Reset}: ${algorithm}`);
+  console.log(`${color.FgCyan}Elliptic curve${color.Reset}: ${ellipticCurve}`);
+  console.log('\n────────────────────────────────', '\n');
 
   console.log(`${color.FgCyan}[${color.FgWhite}${new Date().toLocaleString('en-US', {
     hour: 'numeric',
@@ -334,8 +239,8 @@ console.log('──────────────────────�
 
       const iv = crypto.randomBytes(16);
       const cipher = crypto.createCipheriv(algorithm, Buffer.from(process.env.sharedKey, 'hex'), iv);
+      const encrypted = cryptography.encrypt(`${timestamp}:timestamp:${input}`, cipher);
 
-      const encrypted = Buffer.concat([cipher.update(`${timestamp}:timestamp:${input}`), cipher.final()]);
       client[0].write(`${iv.toString('base64')}:message-cryptic.js-v-${version}:${encrypted.toString('base64')}`);
     })();
   });
