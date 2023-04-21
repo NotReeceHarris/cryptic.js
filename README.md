@@ -6,7 +6,7 @@ This Node.js application is an end-to-end encrypted chat system that ensures sec
   <summary>Screenshots</summary>
   <br>
 
- ![](https://github.com/NotReeceHarris/NotReeceHarris/blob/main/cdn/crypticjs-ngrok.png?raw=true)
+ ![](https://github.com/NotReeceHarris/NotReeceHarris/blob/main/cdn/crypticjs-ngrok-1.2.0.png?raw=true)
 
 </details> 
 
