@@ -8,7 +8,7 @@ Installing Cryptic js is a straightforward process. First, ensure that you have 
 To install Cryptic js, open your terminal or command prompt and enter the following command:
 
 ```
-npm i -g crypticjs
+npm i -g crypticjs@latest
 ```
 
 This command will install Cryptic js globally on your system, making it available to use from any directory.
