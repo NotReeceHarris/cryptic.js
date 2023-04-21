@@ -133,15 +133,30 @@ console.log(`${color.FgCyan}Cryptic.js${color.FgWhite} V${version}${color.Reset}
 console.log(`${color.Dim}(https://github.com/NotReeceHarris/cryptic.js)${color.Reset}`);
 console.log('────────────────────────────────', '\n');
 
+
 // Start with async for a linear process
 (async () => {
   let waitInterval;
   let loadingAnimation;
 
+  const ngrok = require('ngrok');
+
+  if (process.argv[2] === '--ngrok') {
+    await inquirer.prompt([
+      {
+        type: 'input', name: 'ngrok_token',
+        message: 'What is your ngrok auth token?',
+        validate: validation.ngrokToken,
+      },
+    ]).then((answers) => {
+      process.env.ngrok_token = answers.port;
+    });
+  }
+
   // Get listening port
   await inquirer.prompt([
     {
-      type: 'number', name: 'port',
+      type: 'input', name: 'port',
       message: 'Which port would you like to set for listening?',
       validate: validation.listenPort,
     },
@@ -156,21 +171,31 @@ console.log('──────────────────────�
     });
   });
 
-  console.log(`${color.FgGreen}!${color.Reset}${color.Bright} Now listing on port ${process.env.port}...${color.Reset}`);
+  if (process.argv[2] === '--ngrok') {
+    try {
+      process.env.ngrok_url = await ngrok.connect({authtoken: process.env.ngrok_token, proto: 'tcp', addr: process.env.port});
+    } catch (error) {
+      console.log(error.body);
+      process.exit();
+    }
+    console.log(`${color.FgGreen}!${color.Reset}${color.Bright} Now listing on port ${process.env.port} and running a secure tunnel to ${process.env.ngrok_url}...${color.Reset}`);
+  } else {
+    console.log(`${color.FgGreen}!${color.Reset}${color.Bright} Now listing on port ${process.env.port}...${color.Reset}`);
+  }
 
   // Get peer info
   await inquirer.prompt([
     {
       type: 'input',
       name: 'peer_host',
-      message: 'What is the IP address of the device you wish to connect with?',
+      message: 'What is the address of the device you wish to connect with?',
       default: 'localhost',
       validate: validation.peerHost,
     },
     {
-      type: 'number',
+      type: 'input',
       name: 'peer_port',
-      message: 'Which port is the device you wish to connect with listening on?',
+      message: 'What is the address of the device you wish to connect with?',
       validate: validation.peerPort,
     },
   ]).then((answers) => {
