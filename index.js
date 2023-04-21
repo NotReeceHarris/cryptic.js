@@ -4,7 +4,7 @@
 /* eslint-disable max-len */
 /* eslint-disable no-unused-vars */
 
-const version = '1.0.7';
+const version = '1.2.1';
 const algorithm = 'aes-256-cbc';
 const ellipticCurve = 'secp256k1';
 
@@ -178,7 +178,7 @@ console.log('──────────────────────�
       console.log(error.body);
       process.exit();
     }
-    console.log(`${color.FgGreen}!${color.Reset}${color.Bright} Now listing on port ${process.env.port} and running a secure tunnel to ${process.env.ngrok_url}...${color.Reset}`);
+    console.log(`${color.FgGreen}!${color.Reset}${color.Bright} Now listing on port ${process.env.port} and running a secure tunnel to "${process.env.ngrok_url.replace('tcp://', '')}"...${color.Reset}`);
   } else {
     console.log(`${color.FgGreen}!${color.Reset}${color.Bright} Now listing on port ${process.env.port}...${color.Reset}`);
   }
@@ -195,7 +195,7 @@ console.log('──────────────────────�
     {
       type: 'input',
       name: 'peer_port',
-      message: 'What is the address of the device you wish to connect with?',
+      message: 'What is the port of the device you wish to connect with?',
       validate: validation.peerPort,
     },
   ]).then((answers) => {
@@ -294,7 +294,7 @@ console.log('──────────────────────�
   }
 
   console.log('\n', '────────────────────────────────', '\n');
-  console.log(` ${color.FgCyan}Peer${color.Reset}: ${client[0].remoteAddress}`);
+  console.log(` ${color.FgCyan}Peer${color.Reset}: ${process.env.peer_host.replace('tcp://', '')}:${process.env.peer_port}`);
   console.log(` ${color.FgCyan}Shared key checksum${color.Reset}: sha256 ${crypto.createHash('sha256').update(process.env.sharedKey).digest('hex')}`);
   console.log(` ${color.FgCyan}Encryption algorithm${color.Reset}: ${algorithm}`);
   console.log(` ${color.FgCyan}Elliptic curve${color.Reset}: ${ellipticCurve}`);
