@@ -4,7 +4,7 @@
 /* eslint-disable max-len */
 /* eslint-disable no-unused-vars */
 
-const version = '1.0.5';
+const version = '1.0.7';
 const algorithm = 'aes-256-cbc';
 const ellipticCurve = 'secp256k1';
 

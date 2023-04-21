@@ -9,13 +9,13 @@ const toMinify = [
   './utils/validation.js',
 ];
 
-const outputDir = path.join(__dirname, 'bin');
+const outputDir = path.join(__dirname, 'build');
 if (!fs.existsSync(outputDir)) {
   fs.mkdirSync(outputDir);
 }
 
-if (!fs.existsSync( path.join(__dirname, 'bin/utils'))) {
-  fs.mkdirSync( path.join(__dirname, 'bin/utils'));
+if (!fs.existsSync( path.join(__dirname, 'build/utils'))) {
+  fs.mkdirSync( path.join(__dirname, 'build/utils'));
 }
 
 toMinify.forEach((file) => {
