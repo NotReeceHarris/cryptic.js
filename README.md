@@ -1,6 +1,15 @@
 # 💬 cryptic.js
 This Node.js application is an end-to-end encrypted chat system that ensures secure communication between users. The application uses encryption techniques to protect messages in transit and storage, preventing unauthorized access. Users can exchange messages with confidence, knowing that their communication is secure and protected.
 
+ <details>
+
+  <summary>Screenshots</summary>
+  <br>
+
+ ![](https://github.com/NotReeceHarris/NotReeceHarris/blob/main/cdn/crypticjs-ngrok.png?raw=true)
+
+</details> 
+
 ## Installation
 
 Installing Cryptic js is a straightforward process. First, ensure that you have [Node.js](https://nodejs.org/) version `12.x` or higher and a node package manager (such as [NPM](https://www.npmjs.com/)) installed on your system.
