@@ -1,4 +1,7 @@
 # 💬 cryptic.js
+
+![npm](https://img.shields.io/npm/dm/crypticjs?style=flat-square) ![npm](https://img.shields.io/npm/v/crypticjs?label=latest%20version&style=flat-square) ![GitHub](https://img.shields.io/github/license/notreeceharris/cryptic.js?style=flat-square)
+
 This Node.js application is an end-to-end encrypted chat system that ensures secure communication between users. The application uses encryption techniques to protect messages in transit and storage, preventing unauthorized access. Users can exchange messages with confidence, knowing that their communication is secure and protected.
 
  <details>
@@ -10,7 +13,7 @@ This Node.js application is an end-to-end encrypted chat system that ensures sec
 
 </details> 
 
-## 🧰 Installation
+## Installation
 
 Installing Cryptic js is a straightforward process. First, ensure that you have [Node.js](https://nodejs.org/) version `12.x` or higher and a node package manager (such as [NPM](https://www.npmjs.com/)) installed on your system.
 
@@ -30,7 +33,7 @@ crypticjs --version
 
 This should display the version number of Cryptic js that you just installed.
 
-## ⚙️ Usage
+## Usage
 
 Using Cryptic js is a simple process. To get started, open a terminal or command prompt and enter the following command:
 
@@ -66,7 +69,7 @@ Note: If you are using Cryptic js version `1.2.x` or higher, you can set up ngro
 crypticjs --ngrok
 ```
 
-## 🚩 Disclaimer
+## Disclaimer
 
 Using Cryptic js can enhance your security and privacy, but it is not a guarantee of complete security. While Cryptic js uses proven and effective algorithms to secure your communication line, it is important to remember that **no system is 100% secure**.
 
