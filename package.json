@@ -1,6 +1,6 @@
 {
   "name": "crypticjs",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "💬 This Node.js app provides end-to-end encrypted chat for secure communication. It encrypts messages in transit and storage, ensuring privacy and preventing unauthorized access. Users can communicate confidently, knowing their conversations are protected. ",
   "main": "./build/cryptic.js",
   "bin": {

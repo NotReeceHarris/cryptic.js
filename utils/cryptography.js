@@ -26,24 +26,42 @@ const shuffle = (inArr, seed, unshuffle = false) => {
   return outArr;
 };
 
+// This function encrypts a message using a cipher and returns the encrypted result
 const encrypt = (message, cipher) => {
-  message = crypto.randomBytes((parseInt(crypto.randomBytes(4).toString('hex'), 16) % 10000 - 5000) + 5000).toString('base64') + ':obfuscation:' + Buffer.from(message, 'utf8').toString('base64');
+  // Generate a random number between -5000 and 5000, and use it as the length for the random bytes generated for the message
+  const randomLength = (parseInt(crypto.randomBytes(4).toString('hex'), 16) % 10000 - 5000) + 5000;
+  // Generate random bytes and convert them to base64 string, then concatenate with the message encoded as base64 string
+  message = crypto.randomBytes(randomLength).toString('base64') + ':obfuscation:' + Buffer.from(message, 'utf8').toString('base64');
 
-  const array = message.split();
-  const seed = process.env.shuffleKey.split('');
+  // Split the message into an array of characters and get the seed from an environment variable
+  const array = message.split('');
+  const seed = process.env.shuffleKey.split(',');
 
+  // Shuffle the array using the seed
   const shuffled = shuffle(array, seed);
+
+  // Join the shuffled array and update the cipher with the resulting buffer
   return Buffer.concat([cipher.update(shuffled.join('')), cipher.final()]);
 };
 
+// This function takes in two parameters: an encrypted value and a decipher object
 const decrypt = (encrypted, decipher) => {
+  // Decipher the encrypted value and convert it to a UTF-8 string
   decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()]).toString('utf8');
 
-  const array = decrypted.split();
-  const seed = process.env.shuffleKey.split('');
+  // Split the decrypted string into an array
+  const array = decrypted.split('');
 
-  const unshuffled = unshuffle(array, seed, true)[0];
+  // Get the shuffle key from the environment variables and split it into an array
+  const seed = process.env.shuffleKey.split(',');
+
+  // Unshuffle the array using the seed and return the first element of the resulting array
+  const unshuffled = shuffle(array, seed, true).join('');
+
+  // Split the unshuffled string at the ":obfuscation:" marker, decode the resulting base64 string, and convert it to a UTF-8 string
   return Buffer.from(unshuffled.split(':obfuscation:')[1], 'base64').toString('utf8');
 };
 
-module.exports = {encrypt, decrypt};
+// The decrypt function takes in an encrypted value and a decipher object, and returns the decrypted value.
+
+module.exports = {encrypt, decrypt, shuffle};
