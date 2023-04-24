@@ -45,9 +45,9 @@ This command will start Cryptic js and prompt you to enter the listening port, h
 
 ### Using ngrok
 
-Using ngrok to create a secure HTTP tunnel is a great way to enhance your security and privacy by hiding your IP address. It also eliminates the need to port forward your device, making it much easier to use Cryptic js.
+Using ngrok to create a secure TCP tunnel is a great way to enhance your security and privacy by hiding your IP address. It also eliminates the need to port forward your device, making it much easier to use Cryptic js.
 
-To set up an HTTP tunnel on port `X` using ngrok, follow these steps:
+To set up an TCP tunnel on port `X` using ngrok, follow these steps:
 
 1. Download and install ngrok from the official website: https://ngrok.com/download.
 2. Extract the downloaded file and navigate to the folder containing the ngrok executable. 
@@ -60,7 +60,7 @@ ngrok TCP X
 
 Replace `X` with the port number you want to use. This will create a public URL that you can use to access your local server securely.
 
-- Once the HTTP tunnel is created, copy the public URL provided by ngrok.
+- Once the TCP tunnel is created, copy the public URL provided by ngrok.
 - Start Cryptic js and enter the ngrok URL when prompted for the host's IP address and port number.
 
 Note: If you are using Cryptic js version `1.2.x` or higher, you can set up ngrok automatically by running the following command instead of the crypticjs command:
