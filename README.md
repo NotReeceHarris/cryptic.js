@@ -52,10 +52,10 @@ To set up an HTTP tunnel on port `X` using ngrok, follow these steps:
 1. Download and install ngrok from the official website: https://ngrok.com/download.
 2. Extract the downloaded file and navigate to the folder containing the ngrok executable. 
 3. Open a terminal or command prompt and navigate to the folder containing the ngrok executable. 
-4. Type the following command to start a secure HTTP tunnel on port X: 
+4. Type the following command to start a secure TCP tunnel on port X: 
     
 ```
-ngrok http X
+ngrok TCP X
 ```
 
 Replace `X` with the port number you want to use. This will create a public URL that you can use to access your local server securely.
